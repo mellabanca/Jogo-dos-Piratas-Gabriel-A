@@ -31,6 +31,7 @@ function setup() {
 
  torre = Bodies.rectangle(160, 350, 160, 310, options);
  World.add(world,torre);
+ angleMode(DEGREES);
  angulo=20;
  canhao=new Canhaopdf(180,110,130,100,angulo);
 
@@ -54,4 +55,8 @@ function draw() {
  bala.mostrar();
   
    
+}function keyReleased(){
+  if(keyCode===DOWN_ARROW){
+    bala.atirar();
+  }
 }

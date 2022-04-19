@@ -60,3 +60,33 @@ function draw() {
     bala.atirar();
   }
 }
+
+
+
+
+
+
+//Revisão de Matrizes
+
+//Matriz apenas com números
+var matriz1 = [6,7,8,1,2];
+//console.log(matriz1);
+
+//Matriz com vários tipos de dados
+var matriz2 = [59, "Gabriel", true, "Batata"];
+//console.log(matriz2);
+
+//Matriz de matrizes
+var matriz3 = [matriz1, matriz2];
+//console.log(matriz3);
+
+//Acessar elementos das matrizes de acordo com o índice
+//console.log(matriz1[3]);
+//console.log(matriz2[2]);
+//console.log(matriz3[1][1]);
+
+//Adicionar e retirar elementos das matrizes
+matriz1.push(35);
+//console.log(matriz1);
+matriz1.pop();
+//console.log(matriz1);

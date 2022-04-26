@@ -6,6 +6,7 @@ class Bala {
         }
         this.corpo = Bodies.circle(x, y, this.raio, options);
         this.imagem = loadImage("./assets/cannonball.png");
+        this.mostrarrastro=[];
         World.add(world, this.corpo);
     }
 
@@ -15,6 +16,13 @@ class Bala {
         imageMode(CENTER);
         image(this.imagem, pos.x, pos.y, this.raio, this.raio);
         pop();
+        if(this.corpo.velocity.x>0&&pos.x>10){
+            var rastro=[pos.x,pos.y];
+            this.mostrarrastro.push(rastro);
+        }
+        for(var i=0;i<this.mostrarrastro.length;i++){
+            image(this.imagem,this.mostrarrastro[i][0],this.mostrarrastro[i][1],5,5);
+        }
     }
 
     atirar(){

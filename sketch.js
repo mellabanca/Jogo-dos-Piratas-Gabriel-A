@@ -10,6 +10,10 @@ var torreImagem;
 var canhao;
 var angulo;
 var bala;
+var matrizbala=[];
+var inimigo;
+
+
 
 function preload() {
   fundo = loadImage("./assets/background.gif");
@@ -35,7 +39,7 @@ function setup() {
  angulo=20;
  canhao=new Canhaopdf(180,110,130,100,angulo);
 
- bala = new Bala(canhao.posX, canhao.posY);
+ inimigo = new Inimigo(width-79, height-60, 170, 170, -80);
  
 }
 
@@ -52,18 +56,34 @@ function draw() {
  image(torreImagem,torre.position.x, torre.position.y, 160, 310);
  pop();
  canhao.mostrar();
- bala.mostrar();
+
+ Matter.Body.setVelocity(inimigo.corpo, {x:-0.9, y:0});
+
+ inimigo.mostrar();
+
+ for(var i=0;i<matrizbala.length;i++){
+   mostrarbala(matrizbala[i],i);
+ }
   
    
 }function keyReleased(){
   if(keyCode===DOWN_ARROW){
-    bala.atirar();
+    matrizbala[matrizbala.length-1].atirar();
   }
 }
 
+function keyPressed(){
+  if(keyCode===DOWN_ARROW){
+   var bala = new Bala(canhao.posX, canhao.posY);
+   matrizbala.push(bala);
+  }
+}
 
-
-
+function mostrarbala(bala,i){
+  if(bala){
+    bala.mostrar();
+  }
+}
 
 
 //Revisão de Matrizes

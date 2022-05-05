@@ -12,12 +12,16 @@ var angulo;
 var bala;
 var matrizbala=[];
 var inimigo;
-
+var matriznavio=[];
+var matrizAnimacao=[];
+var inimigoDados, inimigoSpritesheet;
 
 
 function preload() {
   fundo = loadImage("./assets/background.gif");
   torreImagem = loadImage("./assets/tower.png");
+  inimigoDados = loadJSON("./assets/boat/boat.json");
+  inimigoSpritesheet = loadImage("./assets/boat/boat.png");
 }
 
 function setup() {
@@ -39,7 +43,13 @@ function setup() {
  angulo=20;
  canhao=new Canhaopdf(180,110,130,100,angulo);
 
- inimigo = new Inimigo(width-79, height-60, 170, 170, -80);
+ var inimigoFrames = inimigoDados.frames;
+
+ for(var i = 0; i < inimigoFrames.length; i++){
+   var pos = inimigoFrames[i].position;
+   var img = inimigoSpritesheet.get(pos.x, pos.y, pos.w, pos.h);
+   matrizAnimacao.push(img);
+ }
  
 }
 
@@ -57,12 +67,13 @@ function draw() {
  pop();
  canhao.mostrar();
 
- Matter.Body.setVelocity(inimigo.corpo, {x:-0.9, y:0});
-
- inimigo.mostrar();
+ mostrarnavio();
+ 
 
  for(var i=0;i<matrizbala.length;i++){
    mostrarbala(matrizbala[i],i);
+   colisao(i);
+  
  }
   
    
@@ -82,8 +93,49 @@ function keyPressed(){
 function mostrarbala(bala,i){
   if(bala){
     bala.mostrar();
+  if(bala.corpo.position.x>=width||bala.corpo.position.y>=height-50){
+    bala.remover(i);
   }
+  }
+   
 }
+
+function mostrarnavio(){
+  if(matriznavio.length>0){
+    if(matriznavio[matriznavio.length-1]===undefined||matriznavio[matriznavio.length-1].corpo.position.x<width-300){
+        var posicoes=[-40,-60,-70,-20];
+        var posicao=random(posicoes);
+         var inimigo = new Inimigo(width, height-60, 170, 170, posicao, matrizAnimacao);
+          matriznavio.push(inimigo); 
+    }
+    for(var i=0; i<matriznavio.length; i++){ 
+      if(matriznavio[i]){
+        Matter.Body.setVelocity(matriznavio[i].corpo, {x:-0.9, y:0});
+
+      matriznavio[i].mostrar();
+      matriznavio[i].animar();
+      }
+    }
+  }else{
+    var inimigo = new Inimigo(width, height-60, 170, 170, -80, matrizAnimacao);
+    matriznavio.push(inimigo);  }
+}
+      function colisao(index){
+        for(var i=0; i<matriznavio.length;i++){
+             if(matrizbala[index]!==undefined&&matriznavio[i]!==undefined){
+               var colidiu=Matter.SAT.collides(
+                 matrizbala[index].corpo,matriznavio[i].corpo
+               )
+              if(colidiu.collided){
+                matriznavio[i].remover(i);
+                Matter.World.remove(world,matrizbala[index].corpo);
+                delete matrizbala[index] 
+              }
+             }
+        }
+
+        
+      }
 
 
 //Revisão de Matrizes

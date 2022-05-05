@@ -9,7 +9,16 @@ class Bala {
         this.mostrarrastro=[];
         World.add(world, this.corpo);
     }
-
+    remover(index){
+        Matter.Body.setVelocity(this.corpo,{
+            x:0,
+            y:0,
+})
+        setTimeout(()=>{
+            Matter.World.remove(world,this.corpo);
+             delete matrizbala[index] 
+        },1000)
+        }
     mostrar(){
         var pos = this.corpo.position;
         push();

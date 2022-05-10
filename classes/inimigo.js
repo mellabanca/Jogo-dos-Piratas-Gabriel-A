@@ -7,6 +7,7 @@ class Inimigo {
         this.imagem = loadImage("./assets/boat.png");
         this.animation = inimigoAnimacao;
         this.speed = 0.05;
+        this.afundou=false;
         World.add(world, this.corpo);
     }
 
@@ -14,6 +15,11 @@ class Inimigo {
         this.speed += 0.05;
     }
         remover(index){
+            this.animation=matrizAfundando;
+            this.speed=0.05
+            this.lar=300;
+            this.alt=300;
+            this.afundou=true;
             setTimeout(()=>{
                 Matter.World.remove(world,matriznavio[index].corpo);
                  delete matriznavio[index] 

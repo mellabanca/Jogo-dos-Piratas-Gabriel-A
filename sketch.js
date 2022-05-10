@@ -15,6 +15,14 @@ var inimigo;
 var matriznavio=[];
 var matrizAnimacao=[];
 var inimigoDados, inimigoSpritesheet;
+var matrizAfundando=[];
+var afundandoDados;
+var afundandoSprite;
+var matrizAfundandob=[];
+var afundandobDados;
+var afundandobSprite;
+var terminou = false;
+
 
 
 function preload() {
@@ -22,6 +30,16 @@ function preload() {
   torreImagem = loadImage("./assets/tower.png");
   inimigoDados = loadJSON("./assets/boat/boat.json");
   inimigoSpritesheet = loadImage("./assets/boat/boat.png");
+  afundandoDados=loadJSON("./assets/boat/brokenBoat.json");
+  afundandoSprite=loadImage("./assets/boat/brokenBoat.png");
+  afundandobDados=loadJSON("./assets/waterSplash/waterSplash.json");
+  afundandobSprite=loadImage("./assets/waterSplash/waterSplash.png");
+
+
+
+
+
+
 }
 
 function setup() {
@@ -50,7 +68,20 @@ function setup() {
    var img = inimigoSpritesheet.get(pos.x, pos.y, pos.w, pos.h);
    matrizAnimacao.push(img);
  }
- 
+ var afundandoFrames = afundandoDados.frames;
+
+ for(var i = 0; i < afundandoFrames.length; i++){
+   var pos = afundandoFrames[i].position;
+   var img = afundandoSprite.get(pos.x, pos.y, pos.w, pos.h);
+   matrizAfundando.push(img);
+ }
+ var afundandobFrames = afundandobDados.frames;
+
+ for(var i = 0; i < afundandobFrames.length; i++){
+   var pos = afundandobFrames[i].position;
+   var img = afundandobSprite.get(pos.x, pos.y, pos.w, pos.h);
+   matrizAfundandob.push(img);
+ }
 }
 
 function draw() {
@@ -93,6 +124,7 @@ function keyPressed(){
 function mostrarbala(bala,i){
   if(bala){
     bala.mostrar();
+    bala.animar();
   if(bala.corpo.position.x>=width||bala.corpo.position.y>=height-50){
     bala.remover(i);
   }
@@ -114,6 +146,14 @@ function mostrarnavio(){
 
       matriznavio[i].mostrar();
       matriznavio[i].animar();
+
+      var colidiu = Matter.SAT.collides(
+        torre, matriznavio[i].corpo
+      );
+      if(colidiu.collided && !matriznavio[i].afundou){
+        terminou = true;
+        gameOver();
+      }
       }
     }
   }else{
@@ -136,6 +176,22 @@ function mostrarnavio(){
 
         
       }
+
+  function gameOver(){
+      swal({
+        title: "Game Over",
+        text: "Até a próxima!",
+        imageUrl: "https://raw.githubusercontent.com/whitehatjr/PiratesInvasion/main/assets/boat.png",
+        imageSize: "150x150",
+        confirmButtonText: "Clique para jogar"
+      },
+      function(isConfirm){
+        if(isConfirm){
+          location.reload();
+        }
+      }
+      );
+    }
 
 
 //Revisão de Matrizes
